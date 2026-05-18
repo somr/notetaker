@@ -202,15 +202,31 @@ class TUI:
         w.noutrefresh()
         curses.doupdate()
 
+    # Shown in the message panel when no command output is present
+    _MD_HINTS = [
+        "Markdown: # H1  ## H2  ### H3",
+        "          **bold**  *italic*  `inline code`",
+        "          - bullet   1. ordered   > blockquote",
+        "          ---  (horizontal rule)   4 spaces = code block",
+    ]
+
     def show_message(self, lines: list):
         w = self._msg_win
         w.erase()
         rows, cols = w.getmaxyx()
-        for i, line in enumerate(lines[:rows]):
-            try:
-                w.addstr(i, 1, line[:cols - 2], curses.color_pair(4))
-            except curses.error:
-                pass
+        if lines:
+            for i, line in enumerate(lines[:rows]):
+                try:
+                    w.addstr(i, 1, line[:cols - 2], curses.color_pair(4))
+                except curses.error:
+                    pass
+        else:
+            hint_attr = curses.color_pair(1) | curses.A_DIM
+            for i, hint in enumerate(self._MD_HINTS[:rows]):
+                try:
+                    w.addstr(i, 1, hint[:cols - 2], hint_attr)
+                except curses.error:
+                    pass
         w.noutrefresh()
         curses.doupdate()
 
