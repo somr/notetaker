@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from store import Note, Store
 
 COMMANDS = [
-    "/create", "/open", "/show", "/list", "/today", "/tag", "/untag",
+    "/create", "/open", "/show", "/list", "/last", "/tag", "/untag",
     "/search_tag", "/search_text", "/rename", "/delete", "/edit", "/help",
     "/exit", "/quit",
 ]
@@ -89,7 +89,7 @@ class CommandHandler:
             "/open": self._cmd_open,
             "/show": self._cmd_show,
             "/list": self._cmd_list,
-            "/today": self._cmd_today,
+            "/last": self._cmd_last,
             "/tag": self._cmd_tag,
             "/untag": self._cmd_untag,
             "/search_tag": self._cmd_search_tag,
@@ -277,18 +277,16 @@ class CommandHandler:
         ] + ["↑↓ scroll  —  /open <n> to activate"]
         self._msg(*lines)
 
-    def _cmd_today(self, _args):
-        today = date.today().isoformat()
-        notes = [n for n in self.store.notes_sorted() if n.date == today]
-        self._search_results = []
-        self._nav_idx = -1
+    def _cmd_last(self, _args):
+        notes = self.store.notes_sorted()
         if not notes:
-            self._refresh_note()
-            self._msg(f"No notes for today ({today}).")
+            self._msg("No notes yet. Use /create to start one.")
             return
-        self.active = notes[0]  # notes_sorted() is descending; first = most recent
+        self._search_results = []
+        self._nav_idx = 0
+        self.active = notes[0]
         self._refresh_note()
-        self._msg(f"[today — {len(notes)} note{'s' if len(notes) != 1 else ''}]  {self.active.title}")
+        self._msg(f"[most recent]  {self.active.date} | {self.active.title}")
 
     def _cmd_tag(self, args):
         if not self.active:
@@ -399,7 +397,7 @@ class CommandHandler:
         self._msg(
             "/create [date] <title>  — create note (date: today/yesterday/DD-Mon-YYYY/YYYY-MM-DD)",
             "/list [date]            — list notes",
-            "/today                  — clear search, open most recent note from today",
+            "/last                   — clear search, open the most recent note",
             "/tag <tag>              — add tag (TAB autocomplete)",
             "/untag <tag>            — remove tag (TAB autocomplete)",
             "/search_tag <tag>       — search by tag",

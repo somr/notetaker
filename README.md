@@ -40,7 +40,7 @@ Notes and the encryption key are stored in `~/.notetaker/`. The key file is crea
 |---|---|
 | `/create [date] <title>` | Create a note. Date defaults to today. |
 | `/list [date]` | List all notes, or notes for a specific date. |
-| `/today` | Clear search filters and open the most recent note from today. |
+| `/last` | Clear search filters and open the most recent note. |
 | `/tag <tag>` | Add a tag to the active note (TAB autocomplete). |
 | `/untag <tag>` | Remove a tag from the active note. |
 | `/search_tag <tag>` | Find all notes with a given tag. |
@@ -67,7 +67,7 @@ Notes and the encryption key are stored in `~/.notetaker/`. The key file is crea
 | ↑ / ↓ | Scroll search results when visible; otherwise scroll the note panel |
 | Page Up / Page Down | Scroll note panel half a page |
 
-Tab/Shift+Tab follow the active search results when a search is in scope, or all notes sorted by date otherwise. The message panel shows the current position, e.g. `[3/481 results]`. Use `/today` to clear search filters and return to full-collection navigation starting from today's most recent note.
+Tab/Shift+Tab follow the active search results when a search is in scope, or all notes sorted by date otherwise. The message panel shows the current position, e.g. `[3/481 results]`. Use `/last` to clear search filters and return to full-collection navigation starting from the most recent note.
 
 ### In-app editor (`/edit`)
 

@@ -50,7 +50,7 @@ Five modules, no framework:
 |-------|--------|
 | `/create [date] <title>` | Create note; date defaults to today |
 | `/list [date]` | List notes (date: `today`/`yesterday`/`DD-Mon-YYYY`/`YYYY-MM-DD`) |
-| `/today` | Clear search filters; open most recent note from today |
+| `/last` | Clear search filters; open the most recent note |
 | `/tag <tag>` | Add tag to active note (TAB autocomplete) |
 | `/untag <tag>` | Remove tag (TAB autocomplete) |
 | `/search_tag <tag>` | Filter by tag |
