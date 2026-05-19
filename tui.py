@@ -367,7 +367,7 @@ class TUI:
                 if handler.edit_mode:
                     handler.edit_cursor_move(-1)
                     self.draw_header(len(handler.store.notes))
-                elif self._msg_lines:
+                elif len(self._msg_lines) > MSG_PANEL_LINES:
                     self._msg_scroll = max(0, self._msg_scroll - 1)
                     self._render_message()
                 else:
@@ -378,7 +378,7 @@ class TUI:
                 if handler.edit_mode:
                     handler.edit_cursor_move(1)
                     self.draw_header(len(handler.store.notes))
-                elif self._msg_lines:
+                elif len(self._msg_lines) > MSG_PANEL_LINES:
                     self._msg_scroll += 1  # clamped inside _render_message
                     self._render_message()
                 else:
