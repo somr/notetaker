@@ -11,8 +11,10 @@ A terminal note-taking app with an encrypted file store and a Claude Code-style 
 - **In-app line editor** — move a cursor line through the note body with ↑/↓, insert, delete, or copy-edit lines without leaving the app
 - **Encrypted storage** — every note is AES-GCM encrypted on disk; key stored at `~/.notetaker/key`
 - **Tag system** — add multiple tags per note with TAB autocomplete
-- **Full-text and tag search** — results shown as a numbered list; `/open <n>` to activate
+- **Full-text and tag search** — results shown as a scrollable numbered list with match count; `/open <n>` to activate
+- **Keyboard navigation** — Tab / Shift+Tab cycles through notes (or search results when a search is active)
 - **Date organisation** — notes are attached to a date; one day can hold any number of notes
+- **RednoteBook importer** — bulk-import legacy journal files (see below)
 
 ## Installation
 
@@ -54,12 +56,16 @@ Notes and the encryption key are stored in `~/.notetaker/`. The key file is crea
 
 `today`, `yesterday`, `DD-Mon-YYYY` (e.g. `20-May-2026`), `YYYY-MM-DD`.
 
-### Scrolling
+### Keyboard navigation
 
 | Key | Action |
 |---|---|
-| ↑ / ↓ | Scroll note panel one line |
+| Tab (empty input) | Open the next note (wraps around) |
+| Shift+Tab (empty input) | Open the previous note |
+| ↑ / ↓ | Scroll search results when visible; otherwise scroll the note panel |
 | Page Up / Page Down | Scroll note panel half a page |
+
+Tab/Shift+Tab follow the active search results when a search is in scope, or all notes sorted by date otherwise. The message panel shows the current position, e.g. `[3/481 results]`.
 
 ### In-app editor (`/edit`)
 
@@ -71,15 +77,35 @@ Notes and the encryption key are stored in `~/.notetaker/`. The key file is crea
 | `/c` | Copy the line above into the input box; Enter replaces it |
 | Esc | Exit edit mode |
 
+## Importing from RednoteBook
+
+`import_rednote.py` reads monthly journal files (`YYYY-MM.txt`) exported by RednoteBook and imports them as encrypted notetaker notes.
+
+```bash
+# Dry run — prints what would be imported, writes nothing
+python3 import_rednote.py --dry-run
+
+# Import from default folder (~/docs/journal)
+python3 import_rednote.py
+
+# Import from a custom folder
+python3 import_rednote.py --folder /path/to/journal
+```
+
+Each day-entry becomes one note titled `Legacy Rednote YYYY-MM-DD`. `#hashtags` in the body are extracted as tags; all imported notes also receive a `rednote` tag. Re-running is safe — notes with an existing title are skipped.
+
+**Requires:** `pip install pyyaml` (in addition to `cryptography`).
+
 ## File structure
 
 ```
 notetaker/
-├── notetaker.py   # entry point
-├── store.py       # encryption, note model, file I/O
-├── commands.py    # command dispatcher and handlers
-├── tui.py         # curses TUI, input loop, scrolling, edit mode
-└── markdown.py    # markdown-to-curses renderer
+├── notetaker.py       # entry point
+├── store.py           # encryption, note model, file I/O
+├── commands.py        # command dispatcher and handlers
+├── tui.py             # curses TUI, input loop, scrolling, edit mode
+├── markdown.py        # markdown-to-curses renderer
+└── import_rednote.py  # RednoteBook bulk importer (standalone script)
 ```
 
 Notes are stored as individually encrypted JSON files under `~/.notetaker/notes/*.enc`. All notes are decrypted into memory at startup; no external database is required.
