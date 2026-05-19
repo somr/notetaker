@@ -4,6 +4,8 @@ A terminal note-taking app with an encrypted file store and a Claude Code-style 
 
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
 
+> **Public reference repository.** This repository is shared for reference only. Issues, pull requests, feature requests, and discussions are not accepted.
+
 ## Features
 
 - **Split-pane TUI** — note panel (scrollable), message/output panel, command input line
