@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from store import Note, Store
 
 COMMANDS = [
-    "/create", "/open", "/list", "/last", "/tag", "/untag",
+    "/create", "/open", "/list", "/last", "/tags", "/tag", "/untag",
     "/search_tag", "/st", "/search_text", "/s", "/rename", "/delete", "/edit", "/help",
     "/exit", "/quit",
 ]
@@ -47,6 +47,7 @@ class CommandHandler:
         self._search_results: list[Note] = []
         self._pending_delete = False
         self._nav_idx: int = -1
+        self._tag_list: list[str] = []
         self._tui = None  # set by TUI after construction
         # edit mode state
         self.edit_mode: bool = False
@@ -89,6 +90,7 @@ class CommandHandler:
             "/open": self._cmd_open,
             "/list": self._cmd_list,
             "/last": self._cmd_last,
+            "/tags": self._cmd_tags,
             "/tag": self._cmd_tag,
             "/untag": self._cmd_untag,
             "/search_tag": self._cmd_search_tag,
@@ -266,6 +268,7 @@ class CommandHandler:
             return
 
         self._search_results = notes
+        self._tag_list = []
         self._nav_idx = -1
         count = len(notes)
         header = f"Found {count} note{'s' if count != 1 else ''}:"
@@ -285,6 +288,23 @@ class CommandHandler:
         self.active = notes[0]
         self._refresh_note()
         self._msg(f"[most recent]  {self.active.date} | {self.active.title}")
+
+    def _cmd_tags(self, _args):
+        from collections import Counter
+        counts = Counter(t for n in self.store.notes.values() for t in n.tags)
+        if not counts:
+            self._msg("No tags found.")
+            return
+        ordered = sorted(counts, key=lambda t: (-counts[t], t))
+        self._search_results = []
+        self._nav_idx = -1
+        self._tag_list = ordered
+        header = f"Found {len(ordered)} tag{'s' if len(ordered) != 1 else ''}:"
+        lines = [header] + [
+            f"{i+1}. {t} ({counts[t]})"
+            for i, t in enumerate(ordered)
+        ] + ["↑↓ scroll  —  Enter to search top-visible tag"]
+        self._msg(*lines)
 
     def _cmd_tag(self, args):
         if not self.active:
@@ -341,6 +361,7 @@ class CommandHandler:
             self._msg(f"No notes found for {label}.")
             return
         self._search_results = results
+        self._tag_list = []
         self._nav_idx = -1
         n = len(results)
         header = f"Found {n} note{'s' if n != 1 else ''} for {label}:"
@@ -396,6 +417,7 @@ class CommandHandler:
         self._msg(
             "/create [date] <title>  — create note (date: today/yesterday/DD-Mon-YYYY/YYYY-MM-DD)",
             "/list [date]            — list notes",
+            "/tags                   — list all tags with note counts",
             "/last                   — clear search, open the most recent note",
             "/tag <tag>              — add tag (TAB autocomplete)",
             "/untag <tag>            — remove tag (TAB autocomplete)",

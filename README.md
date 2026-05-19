@@ -41,6 +41,7 @@ Notes and the encryption key are stored in `~/.notetaker/`. The key file is crea
 | `/create [date] <title>` | Create a note. Date defaults to today. |
 | `/list [date]` | List all notes, or notes for a specific date. |
 | `/last` | Clear search filters and open the most recent note. |
+| `/tags` | List all tags sorted by note count; Enter searches the top-visible tag. |
 | `/tag <tag>` | Add a tag to the active note (TAB autocomplete). |
 | `/untag <tag>` | Remove a tag from the active note. |
 | `/search_tag <tag> [tag2 ...]` or `/st <tag> [tag2 ...]` | Find notes that have all the given tags (AND). |

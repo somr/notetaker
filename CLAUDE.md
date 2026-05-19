@@ -51,6 +51,7 @@ Five modules, no framework:
 | `/create [date] <title>` | Create note; date defaults to today |
 | `/list [date]` | List notes (date: `today`/`yesterday`/`DD-Mon-YYYY`/`YYYY-MM-DD`) |
 | `/last` | Clear search filters; open the most recent note |
+| `/tags` | List all tags with note counts, sorted by frequency; Enter drills into top-visible tag |
 | `/tag <tag>` | Add tag to active note (TAB autocomplete) |
 | `/untag <tag>` | Remove tag (TAB autocomplete) |
 | `/search_tag <tag> [tag2 ...]` / `/st <tag> [tag2 ...]` | Filter by tag — multiple tags = AND |

@@ -355,6 +355,14 @@ class TUI:
                     self.draw_header(len(handler.store.notes))
                     if not keep_going:
                         break
+                elif not line and self._msg_lines and handler._tag_list:
+                    # Search top-visible tag: header at _msg_lines[0], tags start at index 1
+                    tag_idx = max(0, self._msg_scroll - 1)
+                    tag = handler._tag_list[tag_idx]
+                    keep_going = handler.dispatch(f"/st {tag}")
+                    self.draw_header(len(handler.store.notes))
+                    if not keep_going:
+                        break
                 elif line:
                     keep_going = handler.dispatch(line)
                     self.draw_header(len(handler.store.notes))
