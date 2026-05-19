@@ -352,7 +352,16 @@ class TUI:
                         break
 
             elif ch == "\t":
-                self._do_tab()
+                if self._input_buf or handler.edit_mode:
+                    self._do_tab()
+                else:
+                    handler.nav_next()
+                    self.draw_header(len(handler.store.notes))
+
+            elif ch == curses.KEY_BTAB:
+                if not self._input_buf and not handler.edit_mode:
+                    handler.nav_prev()
+                    self.draw_header(len(handler.store.notes))
 
             elif ch == curses.KEY_UP:
                 if handler.edit_mode:

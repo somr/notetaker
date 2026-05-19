@@ -46,6 +46,7 @@ class CommandHandler:
         self.active: Note | None = None
         self._search_results: list[Note] = []
         self._pending_delete = False
+        self._nav_idx: int = -1
         self._tui = None  # set by TUI after construction
         # edit mode state
         self.edit_mode: bool = False
@@ -173,6 +174,27 @@ class CommandHandler:
         self._refresh_note()
         self._msg("Edit mode exited.")
 
+    def nav_next(self):
+        self._navigate(+1)
+
+    def nav_prev(self):
+        self._navigate(-1)
+
+    def _navigate(self, delta: int):
+        lst = self._search_results if self._search_results else self.store.notes_sorted()
+        if not lst:
+            self._msg("No notes to navigate.")
+            return
+        if self._nav_idx < 0 or self._nav_idx >= len(lst):
+            if self.active:
+                ids = [n.id for n in lst]
+                self._nav_idx = ids.index(self.active.id) if self.active.id in ids else -1
+        self._nav_idx = (self._nav_idx + delta) % len(lst)
+        self.active = lst[self._nav_idx]
+        self._refresh_note()
+        src = "results" if self._search_results else "all notes"
+        self._msg(f"[{self._nav_idx + 1}/{len(lst)} {src}]  {self.active.date} | {self.active.title}")
+
     def edit_cursor_move(self, delta: int):
         if not self.edit_mode or not self.active:
             return
@@ -210,6 +232,7 @@ class CommandHandler:
 
         self.active = self.store.new_note(date_str, title)
         self._search_results = []
+        self._nav_idx = -1
         self._refresh_note()
         self._msg(f"Created: [{date_str}] {title}")
 
@@ -243,6 +266,7 @@ class CommandHandler:
             return
 
         self._search_results = notes
+        self._nav_idx = -1
         count = len(notes)
         header = f"Found {count} note{'s' if count != 1 else ''}:"
         lines = [header] + [
@@ -305,6 +329,7 @@ class CommandHandler:
             self._msg(f"No notes found for {label}.")
             return
         self._search_results = results
+        self._nav_idx = -1
         n = len(results)
         header = f"Found {n} note{'s' if n != 1 else ''} for {label}:"
         lines = [header] + [
