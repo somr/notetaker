@@ -3,12 +3,14 @@ import re
 import textwrap
 
 # Matches inline spans in priority order: ** before *, __ before _
+# Underscore variants require a non-word character boundary so that
+# underscores inside identifiers (e.g. count_of_org) are not consumed.
 _INLINE_RE = re.compile(
-    r'(\*\*(?:.+?)\*\*'   # **bold**
-    r'|__(?:.+?)__'        # __bold__
-    r'|`(?:.+?)`'          # `code`
-    r'|\*(?:.+?)\*'        # *italic*
-    r'|_(?:.+?)_)'         # _italic_
+    r'(\*\*(?:.+?)\*\*'            # **bold**
+    r'|(?<!\w)__(?:.+?)__(?!\w)'   # __bold__ (word-boundary guarded)
+    r'|`(?:.+?)`'                  # `code`
+    r'|\*(?:.+?)\*'                # *italic*
+    r'|(?<!\w)_(?:.+?)_(?!\w))'    # _italic_ (word-boundary guarded)
 )
 
 _HR_RE    = re.compile(r'^[-*_]{3,}\s*$')
