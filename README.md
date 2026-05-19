@@ -66,7 +66,7 @@ Notes and the encryption key are stored in `~/.notetaker/`. The key file is crea
 | ↑ / ↓ | Scroll search results when visible; otherwise scroll the note panel |
 | Page Up / Page Down | Scroll note panel half a page |
 
-Tab/Shift+Tab follow the active search results when a search is in scope, or all notes sorted by date otherwise. The message panel shows the current position, e.g. `[3/481 results]`.
+Tab/Shift+Tab follow the active search results when a search is in scope, or all notes sorted by date otherwise. The message panel shows the current position, e.g. `[3/481 results]`. Use `/today` to clear search filters and return to full-collection navigation starting from today's most recent note.
 
 ### In-app editor (`/edit`)
 
