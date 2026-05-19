@@ -318,11 +318,12 @@ class CommandHandler:
 
     def _cmd_search_tag(self, args):
         if not args:
-            self._msg("Usage: /search_tag <tag>")
+            self._msg("Usage: /search_tag <tag> [tag2 ...]  — AND filter")
             return
-        tag = args[0].strip()
-        results = [n for n in self.store.notes_sorted() if tag in n.tags]
-        self._present_results(results, f"tag '{tag}'")
+        tags = " ".join(args).split()
+        results = [n for n in self.store.notes_sorted() if all(t in n.tags for t in tags)]
+        label = " + ".join(f"'{t}'" for t in tags)
+        self._present_results(results, f"tag {label}")
 
     def _cmd_search_text(self, args):
         if not args:
@@ -398,7 +399,7 @@ class CommandHandler:
             "/last                   — clear search, open the most recent note",
             "/tag <tag>              — add tag (TAB autocomplete)",
             "/untag <tag>            — remove tag (TAB autocomplete)",
-            "/search_tag <tag>       — search by tag  (alias: /st)",
+            "/search_tag <tag> [...] — search by tag, multiple = AND  (alias: /st)",
             "/search_text <text>     — full-text search  (alias: /s)",
             "/rename <title>         — rename the active note",
             "/open <n>               — activate search result #n",
@@ -420,7 +421,8 @@ class CommandHandler:
 
         cmd, _, partial = text.partition(" ")
         cmd = cmd.lower()
-        if cmd in ("/tag", "/untag", "/search_tag"):
+        if cmd in ("/tag", "/untag", "/search_tag", "/st"):
             tags = self.store.all_tags()
-            return [t for t in tags if t.startswith(partial)]
+            last = partial.rsplit(" ", 1)[-1]
+            return [t for t in tags if t.startswith(last)]
         return []

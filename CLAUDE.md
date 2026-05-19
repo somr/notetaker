@@ -53,7 +53,7 @@ Five modules, no framework:
 | `/last` | Clear search filters; open the most recent note |
 | `/tag <tag>` | Add tag to active note (TAB autocomplete) |
 | `/untag <tag>` | Remove tag (TAB autocomplete) |
-| `/search_tag <tag>` / `/st <tag>` | Filter by tag |
+| `/search_tag <tag> [tag2 ...]` / `/st <tag> [tag2 ...]` | Filter by tag — multiple tags = AND |
 | `/search_text <text>` / `/s <text>` | Full-text search in title + body |
 | `/rename <title>` | Rename the active note |
 | `/open <n>` | Activate search result #n |
