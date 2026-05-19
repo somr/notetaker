@@ -39,7 +39,7 @@ Four modules, no framework:
 - `CommandHandler._pending_delete` is a boolean flag that makes the next dispatched line a y/n confirmation instead of a command.
 - Edit mode state lives in `CommandHandler` (`edit_mode`, `edit_cursor`, `_pending_copy_line`). `TUI.update_note_panel()` reads these to render the dotted cursor line. In edit mode, word-wrap is disabled so the cursor index maps 1:1 to visual rows. `/c` sets `_pending_copy_line` and populates the input box via `tui.set_input()`; the next dispatched line replaces that body line.
 - TAB completion state (`_pre_tab_buf`, `_completions`, `_comp_idx`) resets on any non-TAB keystroke.
-- Tab/Shift+Tab navigation state lives in `CommandHandler` (`_nav_idx`). When the input buffer is empty and not in edit mode, Tab calls `nav_next()` and Shift+Tab calls `nav_prev()`. The nav list is `_search_results` when non-empty, otherwise `store.notes_sorted()`. `_nav_idx` resets to -1 whenever `_search_results` changes.
+- Tab/Shift+Tab navigation state lives in `CommandHandler` (`_nav_idx`). When the input buffer is empty and not in edit mode, Tab calls `nav_next()` (newer dates, delta -1 in the descending list) and Shift+Tab calls `nav_prev()` (older dates, delta +1). The nav list is `_search_results` when non-empty, otherwise `store.notes_sorted()`. `_nav_idx` resets to -1 whenever `_search_results` changes.
 - The message panel is scrollable: `TUI._msg_lines` holds the full untruncated line list; `TUI._msg_scroll` tracks the offset. ↑/↓ scroll the message panel when `_msg_lines` is non-empty, otherwise they scroll the note panel.
 
 ## Commands

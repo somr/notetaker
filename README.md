@@ -61,8 +61,8 @@ Notes and the encryption key are stored in `~/.notetaker/`. The key file is crea
 
 | Key | Action |
 |---|---|
-| Tab (empty input) | Open the next note (wraps around) |
-| Shift+Tab (empty input) | Open the previous note |
+| Tab (empty input) | Open the next note toward a newer date (wraps around) |
+| Shift+Tab (empty input) | Open the previous note toward an older date |
 | ↑ / ↓ | Scroll search results when visible; otherwise scroll the note panel |
 | Page Up / Page Down | Scroll note panel half a page |
 
