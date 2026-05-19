@@ -176,10 +176,10 @@ class CommandHandler:
         self._msg("Edit mode exited.")
 
     def nav_next(self):
-        self._navigate(+1)
+        self._navigate(-1)
 
     def nav_prev(self):
-        self._navigate(-1)
+        self._navigate(+1)
 
     def _navigate(self, delta: int):
         lst = self._search_results if self._search_results else self.store.notes_sorted()
