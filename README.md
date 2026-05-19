@@ -43,13 +43,12 @@ Notes and the encryption key are stored in `~/.notetaker/`. The key file is crea
 | `/last` | Clear search filters and open the most recent note. |
 | `/tag <tag>` | Add a tag to the active note (TAB autocomplete). |
 | `/untag <tag>` | Remove a tag from the active note. |
-| `/search_tag <tag>` | Find all notes with a given tag. |
-| `/search_text <text>` | Full-text search across all note titles and bodies. |
+| `/search_tag <tag>` or `/st <tag>` | Find all notes with a given tag. |
+| `/search_text <text>` or `/s <text>` | Full-text search across all note titles and bodies. |
 | `/rename <title>` | Rename the active note. |
 | `/open <n>` | Activate search result number *n*. |
 | `/edit` | Enter the in-app line editor (Esc to exit). |
 | `/delete` | Delete the active note (asks for confirmation). |
-| `/show` | Refresh the note panel. |
 | `/help` | Show the command list in the message panel. |
 | `/exit` or `/quit` | Quit. |
 | *(any other text)* | Append the line to the active note body. |
@@ -66,6 +65,8 @@ Notes and the encryption key are stored in `~/.notetaker/`. The key file is crea
 | Shift+Tab (empty input) | Open the previous note toward an older date |
 | ↑ / ↓ | Scroll search results when visible; otherwise scroll the note panel |
 | Page Up / Page Down | Scroll note panel half a page |
+| Enter (empty input, results shown) | Open the top-visible result in the message panel |
+| Escape (results shown) | Dismiss the result list; restore note-panel scrolling |
 
 Tab/Shift+Tab follow the active search results when a search is in scope, or all notes sorted by date otherwise. The message panel shows the current position, e.g. `[3/481 results]`. Use `/last` to clear search filters and return to full-collection navigation starting from the most recent note.
 

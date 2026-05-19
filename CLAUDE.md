@@ -41,7 +41,7 @@ Five modules, no framework:
 - Edit mode state lives in `CommandHandler` (`edit_mode`, `edit_cursor`, `_pending_copy_line`). `TUI.update_note_panel()` reads these to render the dotted cursor line. In edit mode, word-wrap is disabled so the cursor index maps 1:1 to visual rows. `/c` sets `_pending_copy_line` and populates the input box via `tui.set_input()`; the next dispatched line replaces that body line.
 - TAB completion state (`_pre_tab_buf`, `_completions`, `_comp_idx`) resets on any non-TAB keystroke.
 - Tab/Shift+Tab navigation state lives in `CommandHandler` (`_nav_idx`). When the input buffer is empty and not in edit mode, Tab calls `nav_next()` (newer dates, delta -1 in the descending list) and Shift+Tab calls `nav_prev()` (older dates, delta +1). The nav list is `_search_results` when non-empty, otherwise `store.notes_sorted()`. `_nav_idx` resets to -1 whenever `_search_results` changes.
-- The message panel is scrollable: `TUI._msg_lines` holds the full untruncated line list; `TUI._msg_scroll` tracks the offset. ↑/↓ scroll the message panel when `_msg_lines` is non-empty, otherwise they scroll the note panel.
+- The message panel is scrollable: `TUI._msg_lines` holds the full untruncated line list; `TUI._msg_scroll` tracks the offset. ↑/↓ scroll the message panel when `len(_msg_lines) > MSG_PANEL_LINES`, otherwise they scroll the note panel. Enter on an empty input while results are shown dispatches `/open max(1, _msg_scroll)` (the top-visible result; header is always `_msg_lines[0]`). Escape when not in edit mode clears `_msg_lines` via `show_message([])`.
 - `markdown.py` inline regex: `_italic_` and `__bold__` patterns use `(?<!\w)` / `(?!\w)` word-boundary guards so that underscores inside identifiers (e.g. `count_of_org`) are never consumed as markdown markers.
 
 ## Commands
@@ -53,13 +53,12 @@ Five modules, no framework:
 | `/last` | Clear search filters; open the most recent note |
 | `/tag <tag>` | Add tag to active note (TAB autocomplete) |
 | `/untag <tag>` | Remove tag (TAB autocomplete) |
-| `/search_tag <tag>` | Filter by tag |
-| `/search_text <text>` | Full-text search in title + body |
+| `/search_tag <tag>` / `/st <tag>` | Filter by tag |
+| `/search_text <text>` / `/s <text>` | Full-text search in title + body |
 | `/rename <title>` | Rename the active note |
 | `/open <n>` | Activate search result #n |
 | `/edit` | Enter in-app line editor (↑↓ move cursor, text+Enter inserts above cursor, `/d` delete line above, `/c` copy line above to input for editing, Esc exits) |
 | `/delete` | Delete active note (y/n confirmation) |
-| `/show` | Refresh note panel |
 | `/help` | List all commands |
 | `/exit` / `/quit` | Quit |
 | *(any other text)* | Append line to active note body |

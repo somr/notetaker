@@ -336,16 +336,26 @@ class TUI:
                 self._build_windows()
                 self._full_redraw(handler.active, len(handler.store.notes))
 
-            elif ch == "\x1b":  # Escape — exit edit mode
+            elif ch == "\x1b":
                 if handler.edit_mode:
                     handler.exit_edit_mode()
                     self.draw_header(len(handler.store.notes))
+                elif self._msg_lines:
+                    self.show_message([])
 
             elif ch in ("\n", "\r", curses.KEY_ENTER):
                 line = "".join(self._input_buf).strip()
                 self._input_buf = []
                 self._cur_pos = 0
-                if line:
+                if not line and self._msg_lines and handler._search_results:
+                    # Open top-visible result: header is _msg_lines[0], so
+                    # result number = max(1, _msg_scroll)
+                    result_num = max(1, self._msg_scroll)
+                    keep_going = handler.dispatch(f"/open {result_num}")
+                    self.draw_header(len(handler.store.notes))
+                    if not keep_going:
+                        break
+                elif line:
                     keep_going = handler.dispatch(line)
                     self.draw_header(len(handler.store.notes))
                     if not keep_going:

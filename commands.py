@@ -3,8 +3,8 @@ from datetime import date, timedelta
 from store import Note, Store
 
 COMMANDS = [
-    "/create", "/open", "/show", "/list", "/last", "/tag", "/untag",
-    "/search_tag", "/search_text", "/rename", "/delete", "/edit", "/help",
+    "/create", "/open", "/list", "/last", "/tag", "/untag",
+    "/search_tag", "/st", "/search_text", "/s", "/rename", "/delete", "/edit", "/help",
     "/exit", "/quit",
 ]
 
@@ -87,13 +87,14 @@ class CommandHandler:
         handler = {
             "/create": self._cmd_create,
             "/open": self._cmd_open,
-            "/show": self._cmd_show,
             "/list": self._cmd_list,
             "/last": self._cmd_last,
             "/tag": self._cmd_tag,
             "/untag": self._cmd_untag,
             "/search_tag": self._cmd_search_tag,
+            "/st":          self._cmd_search_tag,
             "/search_text": self._cmd_search_text,
+            "/s":           self._cmd_search_text,
             "/rename": self._cmd_rename,
             "/delete": self._cmd_delete,
             "/edit": self._cmd_edit,
@@ -250,9 +251,6 @@ class CommandHandler:
         self._refresh_note()
         self._msg(f"Opened: [{self.active.date}] {self.active.title}")
 
-    def _cmd_show(self, _args):
-        self._refresh_note()
-
     def _cmd_list(self, args):
         notes = self.store.notes_sorted()
         if args:
@@ -400,11 +398,10 @@ class CommandHandler:
             "/last                   — clear search, open the most recent note",
             "/tag <tag>              — add tag (TAB autocomplete)",
             "/untag <tag>            — remove tag (TAB autocomplete)",
-            "/search_tag <tag>       — search by tag",
-            "/search_text <text>     — full-text search",
+            "/search_tag <tag>       — search by tag  (alias: /st)",
+            "/search_text <text>     — full-text search  (alias: /s)",
             "/rename <title>         — rename the active note",
             "/open <n>               — activate search result #n",
-            "/show                   — refresh note panel",
             "/edit                   — enter in-app line editor (Esc to exit)",
             "/delete                 — delete active note",
             "/help                   — show this list",
