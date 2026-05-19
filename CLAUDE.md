@@ -5,8 +5,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Running
 
 ```bash
-# Install the one external dependency (first time only)
-pip install cryptography
+# Install external dependencies (first time only)
+pip install cryptography pyyaml   # pyyaml only needed for import_rednote.py
 
 # Run
 python3 notetaker/notetaker.py
