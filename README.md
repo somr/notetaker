@@ -11,7 +11,7 @@ A terminal note-taking app with an encrypted file store and a Claude Code-style 
 - **In-app line editor** — move a cursor line through the note body with ↑/↓, insert, delete, or copy-edit lines without leaving the app
 - **Encrypted storage** — every note is AES-GCM encrypted on disk; key stored at `~/.notetaker/key`
 - **Tag system** — add multiple tags per note with TAB autocomplete
-- **Full-text and tag search** — results shown as a scrollable numbered list with match count; `/open <n>` to activate
+- **Full-text and tag search** — results shown as a scrollable numbered list with match count; Enter opens the top-visible result
 - **Keyboard navigation** — Tab / Shift+Tab cycles through notes (or search results when a search is active)
 - **Date organisation** — notes are attached to a date; one day can hold any number of notes
 - **RednoteBook importer** — bulk-import legacy journal files (see below)
@@ -19,10 +19,10 @@ A terminal note-taking app with an encrypted file store and a Claude Code-style 
 ## Installation
 
 ```bash
-pip install cryptography
+pip install cryptography pyyaml
 ```
 
-That is the only external dependency. Everything else uses the Python standard library (`curses`, `json`, `hashlib`, `uuid`, `re`, `textwrap`).
+Those are the only external dependencies. Everything else uses the Python standard library (`curses`, `json`, `uuid`, `re`, `textwrap`). `pyyaml` is only needed for the RednoteBook importer.
 
 ## Running
 
@@ -96,8 +96,6 @@ python3 import_rednote.py --folder /path/to/journal
 ```
 
 Each day-entry becomes one note titled `Legacy Rednote YYYY-MM-DD`. `#hashtags` in the body are extracted as tags; all imported notes also receive a `rednote` tag. Re-running is safe — notes with an existing title are skipped.
-
-**Requires:** `pip install pyyaml` (in addition to `cryptography`).
 
 ## File structure
 
