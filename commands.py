@@ -4,7 +4,7 @@ from store import Note, Store
 
 COMMANDS = [
     "/create", "/open", "/show", "/list", "/today", "/tag", "/untag",
-    "/search_tag", "/search_text", "/delete", "/edit", "/help",
+    "/search_tag", "/search_text", "/rename", "/delete", "/edit", "/help",
     "/exit", "/quit",
 ]
 
@@ -94,6 +94,7 @@ class CommandHandler:
             "/untag": self._cmd_untag,
             "/search_tag": self._cmd_search_tag,
             "/search_text": self._cmd_search_text,
+            "/rename": self._cmd_rename,
             "/delete": self._cmd_delete,
             "/edit": self._cmd_edit,
             "/help": self._cmd_help,
@@ -352,6 +353,20 @@ class CommandHandler:
         ] + ["↑↓ scroll  —  /open <n> to activate"]
         self._msg(*lines)
 
+    def _cmd_rename(self, args):
+        if not self.active:
+            self._msg("No active note.")
+            return
+        new_title = " ".join(args).strip()
+        if not new_title:
+            self._msg("Usage: /rename <new title>")
+            return
+        old_title = self.active.title
+        self.active.title = new_title
+        self.store.save_note(self.active)
+        self._refresh_note()
+        self._msg(f"Renamed: '{old_title}' → '{new_title}'")
+
     def _cmd_delete(self, _args):
         if not self.active:
             self._msg("No active note to delete.")
@@ -389,6 +404,7 @@ class CommandHandler:
             "/untag <tag>            — remove tag (TAB autocomplete)",
             "/search_tag <tag>       — search by tag",
             "/search_text <text>     — full-text search",
+            "/rename <title>         — rename the active note",
             "/open <n>               — activate search result #n",
             "/show                   — refresh note panel",
             "/edit                   — enter in-app line editor (Esc to exit)",

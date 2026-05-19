@@ -45,6 +45,7 @@ Notes and the encryption key are stored in `~/.notetaker/`. The key file is crea
 | `/untag <tag>` | Remove a tag from the active note. |
 | `/search_tag <tag>` | Find all notes with a given tag. |
 | `/search_text <text>` | Full-text search across all note titles and bodies. |
+| `/rename <title>` | Rename the active note. |
 | `/open <n>` | Activate search result number *n*. |
 | `/edit` | Enter the in-app line editor (Esc to exit). |
 | `/delete` | Delete the active note (asks for confirmation). |

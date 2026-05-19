@@ -55,6 +55,7 @@ Five modules, no framework:
 | `/untag <tag>` | Remove tag (TAB autocomplete) |
 | `/search_tag <tag>` | Filter by tag |
 | `/search_text <text>` | Full-text search in title + body |
+| `/rename <title>` | Rename the active note |
 | `/open <n>` | Activate search result #n |
 | `/edit` | Enter in-app line editor (↑↓ move cursor, text+Enter inserts above cursor, `/d` delete line above, `/c` copy line above to input for editing, Esc exits) |
 | `/delete` | Delete active note (y/n confirmation) |
