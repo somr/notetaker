@@ -243,9 +243,12 @@ class CommandHandler:
             return
 
         self._search_results = notes
-        lines = [f"{i+1}. {n.date} | {n.title}" + (f" [{', '.join(n.tags)}]" if n.tags else "")
-                 for i, n in enumerate(notes)]
-        lines.append("Type /open <n> to activate.")
+        count = len(notes)
+        header = f"Found {count} note{'s' if count != 1 else ''}:"
+        lines = [header] + [
+            f"{i+1}. {n.date} | {n.title}" + (f" [{', '.join(n.tags)}]" if n.tags else "")
+            for i, n in enumerate(notes)
+        ] + ["↑↓ scroll  —  /open <n> to activate"]
         self._msg(*lines)
 
     def _cmd_tag(self, args):
@@ -302,9 +305,12 @@ class CommandHandler:
             self._msg(f"No notes found for {label}.")
             return
         self._search_results = results
-        lines = [f"{i+1}. {n.date} | {n.title}" + (f" [{', '.join(n.tags)}]" if n.tags else "")
-                 for i, n in enumerate(results)]
-        lines.append("Type /open <n> to activate.")
+        n = len(results)
+        header = f"Found {n} note{'s' if n != 1 else ''} for {label}:"
+        lines = [header] + [
+            f"{i+1}. {r.date} | {r.title}" + (f" [{', '.join(r.tags)}]" if r.tags else "")
+            for i, r in enumerate(results)
+        ] + ["↑↓ scroll  —  /open <n> to activate"]
         self._msg(*lines)
 
     def _cmd_delete(self, _args):

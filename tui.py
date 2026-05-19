@@ -21,6 +21,8 @@ class TUI:
         self._pre_tab_buf = None
         self._note_scroll = 0
         self._displayed_note_id = None
+        self._msg_lines: list[str] = []
+        self._msg_scroll: int = 0
         self._setup_curses()
         self._build_windows()
 
@@ -211,13 +213,33 @@ class TUI:
     ]
 
     def show_message(self, lines: list):
+        self._msg_lines = lines
+        self._msg_scroll = 0
+        self._render_message()
+
+    def _render_message(self):
         w = self._msg_win
         w.erase()
         rows, cols = w.getmaxyx()
+        lines = self._msg_lines
         if lines:
-            for i, line in enumerate(lines[:rows]):
+            total = len(lines)
+            self._msg_scroll = max(0, min(self._msg_scroll, max(0, total - rows)))
+            visible = lines[self._msg_scroll : self._msg_scroll + rows]
+            for i, line in enumerate(visible):
                 try:
                     w.addstr(i, 1, line[:cols - 2], curses.color_pair(4))
+                except curses.error:
+                    pass
+            ind_attr = curses.color_pair(1) | curses.A_DIM
+            if self._msg_scroll > 0:
+                try:
+                    w.addstr(0, cols - 8, ' ↑ more', ind_attr)
+                except curses.error:
+                    pass
+            if self._msg_scroll + rows < total:
+                try:
+                    w.addstr(rows - 1, cols - 8, ' ↓ more', ind_attr)
                 except curses.error:
                     pass
         else:
@@ -336,6 +358,9 @@ class TUI:
                 if handler.edit_mode:
                     handler.edit_cursor_move(-1)
                     self.draw_header(len(handler.store.notes))
+                elif self._msg_lines:
+                    self._msg_scroll = max(0, self._msg_scroll - 1)
+                    self._render_message()
                 else:
                     self._note_scroll = max(0, self._note_scroll - 1)
                     self.update_note_panel(handler.active)
@@ -344,6 +369,9 @@ class TUI:
                 if handler.edit_mode:
                     handler.edit_cursor_move(1)
                     self.draw_header(len(handler.store.notes))
+                elif self._msg_lines:
+                    self._msg_scroll += 1  # clamped inside _render_message
+                    self._render_message()
                 else:
                     self._note_scroll += 1  # clamped inside update_note_panel
                     self.update_note_panel(handler.active)
