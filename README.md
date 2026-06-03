@@ -2,6 +2,7 @@
 
 A terminal note-taking app with an encrypted file store and a Claude Code-style interface.
 
+![Version 1.1.0](https://img.shields.io/badge/version-1.1.0-informational)
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
 
 > **Public reference repository.** This repository is shared for reference only. Issues, pull requests, feature requests, and discussions are not accepted.
@@ -10,7 +11,7 @@ A terminal note-taking app with an encrypted file store and a Claude Code-style 
 
 - **Split-pane TUI** — note panel (scrollable), message/output panel, command input line
 - **Markdown rendering** — headings, bold, italic, inline code, lists, blockquotes, horizontal rules
-- **In-app line editor** — move a cursor line through the note body with ↑/↓, insert, delete, or copy-edit lines without leaving the app
+- **In-app line editor** — move a cursor line through the note body with ↑/↓, insert, delete, copy-edit lines, or press Enter on an empty input to add a blank line
 - **Encrypted storage** — every note is AES-GCM encrypted on disk; key stored at `~/.notetaker/key`
 - **Tag system** — add multiple tags per note with TAB autocomplete
 - **Full-text and tag search** — results shown as a scrollable numbered list with match count; Enter opens the top-visible result
@@ -49,6 +50,7 @@ Notes and the encryption key are stored in `~/.notetaker/`. The key file is crea
 | `/search_tag <tag> [tag2 ...]` or `/st <tag> [tag2 ...]` | Find notes that have all the given tags (AND). |
 | `/search_text <text>` or `/s <text>` | Full-text search across all note titles and bodies. |
 | `/rename <title>` | Rename the active note. |
+| `/duplicate [new title]` | Duplicate the active note to today's date, copying body and tags. Optional new title renames it in one step. |
 | `/open <n>` | Activate search result number *n*. |
 | `/edit` | Enter the in-app line editor (Esc to exit). |
 | `/delete` | Delete the active note (asks for confirmation). |

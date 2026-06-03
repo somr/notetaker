@@ -11,8 +11,9 @@ EDIT_CURSOR_CHAR = "· "
 
 
 class TUI:
-    def __init__(self, stdscr):
+    def __init__(self, stdscr, version: str = ""):
         self._scr = stdscr
+        self._version = version
         self._handler = None
         self._input_buf = []   # list of chars
         self._cur_pos = 0      # cursor position in _input_buf
@@ -81,7 +82,8 @@ class TUI:
         w = self._header_win
         w.erase()
         edit_mode = self._handler.edit_mode if self._handler else False
-        title = "NOTETAKER -- EDIT MODE --" if edit_mode else "NOTETAKER"
+        base = f"NOTETAKER {self._version}".strip()
+        title = f"{base} -- EDIT MODE --" if edit_mode else base
         info = f"[{count} note{'s' if count != 1 else ''}]"
         padding = max(0, self._cols - len(title) - len(info) - 2)
         try:
@@ -363,7 +365,7 @@ class TUI:
                     self.draw_header(len(handler.store.notes))
                     if not keep_going:
                         break
-                elif line:
+                elif line or handler.active:
                     keep_going = handler.dispatch(line)
                     self.draw_header(len(handler.store.notes))
                     if not keep_going:

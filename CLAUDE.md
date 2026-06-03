@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+**Version: 1.1.0**
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Running
@@ -57,6 +59,7 @@ Five modules, no framework:
 | `/search_tag <tag> [tag2 ...]` / `/st <tag> [tag2 ...]` | Filter by tag — multiple tags = AND |
 | `/search_text <text>` / `/s <text>` | Full-text search in title + body |
 | `/rename <title>` | Rename the active note |
+| `/duplicate [new title]` | Duplicate active note to today's date, copying body and tags; optional new title |
 | `/open <n>` | Activate search result #n |
 | `/edit` | Enter in-app line editor (↑↓ move cursor, text+Enter inserts above cursor, `/d` delete line above, `/c` copy line above to input for editing, Esc exits) |
 | `/delete` | Delete active note (y/n confirmation) |

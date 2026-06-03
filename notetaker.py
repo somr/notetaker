@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+__version__ = "1.1.0"
+
 import curses
 import sys
 
@@ -12,7 +14,7 @@ def main():
     handler = CommandHandler(store)
 
     def _run(stdscr):
-        tui = TUI(stdscr)
+        tui = TUI(stdscr, __version__)
         tui.run(handler)
 
     try:

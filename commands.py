@@ -4,8 +4,8 @@ from store import Note, Store
 
 COMMANDS = [
     "/create", "/open", "/list", "/last", "/tags", "/tag", "/untag",
-    "/search_tag", "/st", "/search_text", "/s", "/rename", "/delete", "/edit", "/help",
-    "/exit", "/quit",
+    "/search_tag", "/st", "/search_text", "/s", "/rename", "/duplicate",
+    "/delete", "/edit", "/help", "/exit", "/quit",
 ]
 
 DATE_MONTH_MAP = {
@@ -98,6 +98,7 @@ class CommandHandler:
             "/search_text": self._cmd_search_text,
             "/s":           self._cmd_search_text,
             "/rename": self._cmd_rename,
+            "/duplicate": self._cmd_duplicate,
             "/delete": self._cmd_delete,
             "/edit": self._cmd_edit,
             "/help": self._cmd_help,
@@ -385,6 +386,21 @@ class CommandHandler:
         self._refresh_note()
         self._msg(f"Renamed: '{old_title}' → '{new_title}'")
 
+    def _cmd_duplicate(self, args):
+        if not self.active:
+            self._msg("No active note to duplicate.")
+            return
+        today = date.today().isoformat()
+        new_note = self.store.duplicate_note(self.active, today)
+        if args:
+            new_note.title = " ".join(args).strip()
+            self.store.save_note(new_note)
+        self._search_results = []
+        self._nav_idx = -1
+        self.active = new_note
+        self._refresh_note()
+        self._msg(f"Duplicated as: [{today}] {new_note.title}")
+
     def _cmd_delete(self, _args):
         if not self.active:
             self._msg("No active note to delete.")
@@ -424,6 +440,7 @@ class CommandHandler:
             "/search_tag <tag> [...] — search by tag, multiple = AND  (alias: /st)",
             "/search_text <text>     — full-text search  (alias: /s)",
             "/rename <title>         — rename the active note",
+            "/duplicate [new title]  — duplicate active note to today (optional rename)",
             "/open <n>               — activate search result #n",
             "/edit                   — enter in-app line editor (Esc to exit)",
             "/delete                 — delete active note",

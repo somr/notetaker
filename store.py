@@ -121,3 +121,17 @@ class Store:
         )
         self.save_note(note)
         return note
+
+    def duplicate_note(self, source: Note, new_date: str) -> Note:
+        now = datetime.now().isoformat(timespec="seconds")
+        note = Note(
+            id=str(uuid.uuid4()),
+            date=new_date,
+            title=source.title,
+            body=source.body,
+            tags=list(source.tags),
+            created_at=now,
+            updated_at=now,
+        )
+        self.save_note(note)
+        return note
