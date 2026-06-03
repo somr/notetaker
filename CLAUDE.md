@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 pip install cryptography pyyaml   # pyyaml only needed for import_rednote.py
 
 # Run
-python3 notetaker/notetaker.py
+python3 notetaker.py
 ```
 
 Notes and key are stored in `~/.notetaker/`. The 32-byte AES key lives at `~/.notetaker/key` (created on first run, `chmod 600`). Each note is a separate AES-GCM encrypted JSON file under `~/.notetaker/notes/*.enc`.

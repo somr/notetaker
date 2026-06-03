@@ -10,7 +10,7 @@ A terminal note-taking app with an encrypted file store and a Claude Code-style 
 ## Features
 
 - **Split-pane TUI** — note panel (scrollable), message/output panel, command input line
-- **Markdown rendering** — headings, bold, italic, inline code, lists, blockquotes, horizontal rules
+- **Markdown rendering** — headings, bold, italic, inline code, code blocks, lists, blockquotes, horizontal rules
 - **In-app line editor** — move a cursor line through the note body with ↑/↓, insert, delete, copy-edit lines, or press Enter on an empty input to add a blank line
 - **Encrypted storage** — every note is AES-GCM encrypted on disk; key stored at `~/.notetaker/key`
 - **Tag system** — add multiple tags per note with TAB autocomplete
@@ -81,6 +81,7 @@ Tab/Shift+Tab follow the active search results when a search is in scope, or all
 |---|---|
 | ↑ / ↓ | Move the `· · ·` cursor line up or down |
 | text + Enter | Insert the text as a new line above the cursor |
+| Enter (empty input) | Insert a blank line above the cursor |
 | `/d` | Delete the line above the cursor |
 | `/c` | Copy the line above into the input box; Enter replaces it |
 | Esc | Exit edit mode |
