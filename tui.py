@@ -133,6 +133,17 @@ class TUI:
                 pass
             row += 1
 
+        if note.url and row < rows:
+            hint = "  Ctrl+O: open"
+            max_url_len = max(1, cols - len(hint) - 7)  # room for " URL: " prefix
+            url_display = note.url if len(note.url) <= max_url_len else note.url[:max_url_len - 1] + "…"
+            try:
+                w.addstr(row, 0, (f" URL: {url_display}{hint}")[:cols - 1],
+                         curses.color_pair(1) | curses.A_DIM)
+            except curses.error:
+                pass
+            row += 1
+
         row += 1  # blank separator
         body_start_row = row
         available = max(0, rows - body_start_row)
@@ -253,6 +264,9 @@ class TUI:
                     pass
         w.noutrefresh()
         curses.doupdate()
+
+    def scroll_note_to_bottom(self):
+        self._note_scroll = 999999  # clamped to valid range in update_note_panel
 
     def set_input(self, text: str):
         self._input_buf = list(text)
@@ -433,6 +447,10 @@ class TUI:
 
             elif ch == curses.KEY_END or ch == "\x05":   # End / Ctrl-E
                 self._cur_pos = len(self._input_buf)
+
+            elif ch == "\x0f":  # Ctrl-O — open linked URL
+                if self._handler:
+                    self._handler.open_url()
 
             elif ch == "\x03":  # Ctrl-C
                 break

@@ -1,3 +1,4 @@
+import webbrowser
 from datetime import date, timedelta
 
 from store import Note, Store
@@ -5,7 +6,7 @@ from store import Note, Store
 COMMANDS = [
     "/create", "/open", "/list", "/last", "/tags", "/tag", "/untag",
     "/search_tag", "/st", "/search_text", "/s", "/rename", "/duplicate",
-    "/delete", "/edit", "/help", "/exit", "/quit",
+    "/link", "/unlink", "/delete", "/edit", "/help", "/exit", "/quit",
 ]
 
 DATE_MONTH_MAP = {
@@ -99,6 +100,8 @@ class CommandHandler:
             "/s":           self._cmd_search_text,
             "/rename": self._cmd_rename,
             "/duplicate": self._cmd_duplicate,
+            "/link":   self._cmd_link,
+            "/unlink": self._cmd_unlink,
             "/delete": self._cmd_delete,
             "/edit": self._cmd_edit,
             "/help": self._cmd_help,
@@ -218,6 +221,8 @@ class CommandHandler:
             return
         self.active.body += line + "\n"
         self.store.save_note(self.active)
+        if self._tui:
+            self._tui.scroll_note_to_bottom()
         self._refresh_note()
 
     def _cmd_create(self, args):
@@ -401,6 +406,38 @@ class CommandHandler:
         self._refresh_note()
         self._msg(f"Duplicated as: [{today}] {new_note.title}")
 
+    def _cmd_link(self, args):
+        if not self.active:
+            self._msg("No active note.")
+            return
+        if not args:
+            self._msg("Usage: /link <url>")
+            return
+        url = args[0].strip()
+        if not (url.startswith("http://") or url.startswith("https://")):
+            self._msg("URL must start with http:// or https://")
+            return
+        self.active.url = url
+        self.store.save_note(self.active)
+        self._refresh_note()
+        self._msg("Link set. Ctrl+O to open.")
+
+    def _cmd_unlink(self, _args):
+        if not self.active:
+            self._msg("No active note.")
+            return
+        self.active.url = ""
+        self.store.save_note(self.active)
+        self._refresh_note()
+        self._msg("Link removed.")
+
+    def open_url(self):
+        if not self.active or not self.active.url:
+            self._msg("No URL linked to this note. Use /link <url>.")
+            return
+        webbrowser.open(self.active.url)
+        self._msg(f"Opening: {self.active.url}")
+
     def _cmd_delete(self, _args):
         if not self.active:
             self._msg("No active note to delete.")
@@ -441,6 +478,8 @@ class CommandHandler:
             "/search_text <text>     — full-text search  (alias: /s)",
             "/rename <title>         — rename the active note",
             "/duplicate [new title]  — duplicate active note to today (optional rename)",
+            "/link <url>             — attach a URL to the active note (http/https); Ctrl+O to open",
+            "/unlink                 — remove the URL from the active note",
             "/open <n>               — activate search result #n",
             "/edit                   — enter in-app line editor (Esc to exit)",
             "/delete                 — delete active note",

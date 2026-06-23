@@ -21,6 +21,7 @@ class Note:
     title: str
     body: str
     tags: list
+    url: str           # optional URL attachment
     created_at: str
     updated_at: str
 
@@ -31,6 +32,7 @@ class Note:
             "title": self.title,
             "body": self.body,
             "tags": self.tags,
+            "url": self.url,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
         }
@@ -43,6 +45,7 @@ class Note:
             title=d["title"],
             body=d.get("body", ""),
             tags=d.get("tags", []),
+            url=d.get("url", ""),
             created_at=d["created_at"],
             updated_at=d["updated_at"],
         )
@@ -116,6 +119,7 @@ class Store:
             title=title,
             body="",
             tags=[],
+            url="",
             created_at=now,
             updated_at=now,
         )
@@ -130,6 +134,7 @@ class Store:
             title=source.title,
             body=source.body,
             tags=list(source.tags),
+            url=source.url,
             created_at=now,
             updated_at=now,
         )

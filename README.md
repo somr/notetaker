@@ -2,7 +2,7 @@
 
 A terminal note-taking app with an encrypted file store and a Claude Code-style interface.
 
-![Version 1.1.0](https://img.shields.io/badge/version-1.1.0-informational)
+![Version 1.1.1](https://img.shields.io/badge/version-1.1.1-informational)
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
 
 > **Public reference repository.** This repository is shared for reference only. Issues, pull requests, feature requests, and discussions are not accepted.
@@ -15,6 +15,7 @@ A terminal note-taking app with an encrypted file store and a Claude Code-style 
 - **Encrypted storage** — every note is AES-GCM encrypted on disk; key stored at `~/.notetaker/key`
 - **Tag system** — add multiple tags per note with TAB autocomplete
 - **Full-text and tag search** — results shown as a scrollable numbered list with match count; Enter opens the top-visible result
+- **URL attachment** — attach one URL per note with `/link`; always visible in the note header; open in the default browser with Ctrl+O
 - **Keyboard navigation** — Tab / Shift+Tab cycles through notes (or search results when a search is active)
 - **Date organisation** — notes are attached to a date; one day can hold any number of notes
 - **RednoteBook importer** — bulk-import legacy journal files (see below)
@@ -50,7 +51,9 @@ Notes and the encryption key are stored in `~/.notetaker/`. The key file is crea
 | `/search_tag <tag> [tag2 ...]` or `/st <tag> [tag2 ...]` | Find notes that have all the given tags (AND). |
 | `/search_text <text>` or `/s <text>` | Full-text search across all note titles and bodies. |
 | `/rename <title>` | Rename the active note. |
-| `/duplicate [new title]` | Duplicate the active note to today's date, copying body and tags. Optional new title renames it in one step. |
+| `/duplicate [new title]` | Duplicate the active note to today's date, copying body, tags, and URL. Optional new title renames it in one step. |
+| `/link <url>` | Attach a URL to the active note (http/https). The URL is always shown in the note header. |
+| `/unlink` | Remove the URL from the active note. |
 | `/open <n>` | Activate search result number *n*. |
 | `/edit` | Enter the in-app line editor (Esc to exit). |
 | `/delete` | Delete the active note (asks for confirmation). |
@@ -70,6 +73,7 @@ Notes and the encryption key are stored in `~/.notetaker/`. The key file is crea
 | Shift+Tab (empty input) | Open the previous note toward an older date |
 | ↑ / ↓ | Scroll search results when visible; otherwise scroll the note panel |
 | Page Up / Page Down | Scroll note panel half a page |
+| Ctrl+O | Open the URL linked to the active note in the default browser |
 | Enter (empty input, results shown) | Open the top-visible result in the message panel |
 | Escape (results shown) | Dismiss the result list; restore note-panel scrolling |
 
